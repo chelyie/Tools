@@ -1,4 +1,4 @@
-# QA Tools & Proof Comparison Sandbox
+# QA SandBox
 
 A personal project built to explore, practice, and experiment with various Quality Assurance tools and proof comparison techniques.
 
