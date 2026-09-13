@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .tw_h1 {
+        line-height: var(--mui-tokens-lineHeight-h1);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-h1);
+        font-family: var(--mui-tokens-fontFamily-headings);
+    }
+
+    .tw_h2 {
+        line-height: var(--mui-tokens-lineHeight-h2);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-h2);
+        font-family: var(--mui-tokens-fontFamily-headings);
+    }
+
+    .tw_h3 {
+        line-height: var(--mui-tokens-lineHeight-h3);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-h3);
+        font-family: var(--mui-tokens-fontFamily-headings);
+    }
+
+    .tw_h4 {
+        line-height: var(--mui-tokens-lineHeight-h4);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-h4);
+        font-family: var(--mui-tokens-fontFamily-headings);
+    }
+
+    .tw_h5 {
+        line-height: var(--mui-tokens-lineHeight-h5);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-h5);
+        font-family: var(--mui-tokens-fontFamily-headings);
+    }
+
+    .tw_h6 {
+        line-height: var(--mui-tokens-lineHeight-h6);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-h6);
+        font-family: var(--mui-tokens-fontFamily-headings);
+    }
+
+    .tw_body_large {
+        line-height: var(--mui-tokens-lineHeight-lg);
+        font-weight: var(--mui-tokens-fontWeight-normal);
+        font-size: var(--mui-tokens-fontSize-lg);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_large_bold {
+        line-height: var(--mui-tokens-lineHeight-lg);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-lg);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_medium {
+        line-height: var(--mui-tokens-lineHeight-md);
+        font-weight: var(--mui-tokens-fontWeight-normal);
+        font-size: var(--mui-tokens-fontSize-md);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_medium_bold {
+        line-height: var(--mui-tokens-lineHeight-md);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-md);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_normal {
+        line-height: var(--mui-tokens-lineHeight-nm);
+        font-weight: var(--mui-tokens-fontWeight-normal);
+        font-size: var(--mui-tokens-fontSize-nm);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_normal_bold {
+        line-height: var(--mui-tokens-lineHeight-nm);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-nm);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_small {
+        line-height: var(--mui-tokens-lineHeight-sm);
+        font-weight: var(--mui-tokens-fontWeight-normal);
+        font-size: var(--mui-tokens-fontSize-sm);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_small_bold {
+        line-height: var(--mui-tokens-lineHeight-sm);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-sm);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_extra-small {
+        line-height: var(--mui-tokens-lineHeight-xs);
+        font-weight: var(--mui-tokens-fontWeight-normal);
+        font-size: var(--mui-tokens-fontSize-xs);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+
+    .tw_body_extra-small_bold {
+        line-height: var(--mui-tokens-lineHeight-xs);
+        font-weight: var(--mui-tokens-fontWeight-bold);
+        font-size: var(--mui-tokens-fontSize-xs);
+        font-family: var(--mui-tokens-fontFamily-body);
+    }
+}
+
+/* GLOBAL AUTOFILL INPUTS */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: inherit !important;
+    caret-color: inherit !important;
+    transition: background-color 9999s ease-in-out 0s, box-shadow 9999s ease-in-out 0s;
+}
