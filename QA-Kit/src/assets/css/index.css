@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cursor-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        600px circle at var(--cursor-x) var(--cursor-y),
+        rgba(190, 24, 93, 0.32),
+        transparent 60%
+    );
+    transition: background 80ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cursor-glow {
+        transition: none;
+        background: none;
+    }
+}
