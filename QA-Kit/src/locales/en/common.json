@@ -1,0 +1,21 @@
+ {
+  "brandname": "QA Evidence",
+  "description": "Choose a format for your evidence",
+  "generate": "Generate evidence",
+  "reset": "Reset / new evidence",
+  "replace": "Replace",
+  "remove": "Remove",
+  "upload": "Upload",
+  "format1": {
+      "title": "Format 1",
+      "devices": "Web + Figma"
+    },
+  "format2": {
+      "title": "Format 2",
+      "devices": "iOS + Android"
+    },
+  "format3": {
+      "title": "Format 3",
+      "devices": "iOS + Android + Web Mobile"
+  }
+}
