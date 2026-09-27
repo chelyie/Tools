@@ -18,6 +18,9 @@ export type HTMLAttributesDivElement =
 export type HTMLAttributesSpanElement =
     HTMLAttributes<HTMLSpanElement>;
 
+export type HTMLAttributesButtonElement =
+    HTMLAttributes<HTMLButtonElement>;
+
 // HTML element / ref types
 export type DivElementNull =
     HTMLDivElement | null;

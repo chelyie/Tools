@@ -7,5 +7,6 @@ const element = document.getElementById('root');
 
 
 if (element) {
-    createRoot(element).render(<App />);
+    createRoot(element)
+        .render(<App />);
 }

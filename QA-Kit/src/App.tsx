@@ -1,19 +1,15 @@
-import Navbar from '@components/navbar/Navbar';
+import AppRouter from './router/AppRouter';
+import CursorGlow from '@components/effects/CursorGlow';
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <div className="tw_p-4">
-        <h1 className="tw_text-2xl tw_font-bold tw_mb-4">
-          Welcome to QA-Kit
-        </h1>
-        <p className="tw_text-gray-700">
-          This is a sample application using Tailwind CSS and React.
-        </p>
+    <div className="tw_min-h-screen tw_bg-pink-50 dark:tw_bg-pink-950 tw_text-ink dark:tw_text-ink-light">
+      <CursorGlow />
+      <div className="tw_relative tw_z-10">
+        <AppRouter />
       </div>
-    </>
+    </div>
   );
 }
 
-export default App
+export default App;

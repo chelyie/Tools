@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '@assets': path.join(sourceDirectory, 'assets'),
       '@components': path.join(sourceDirectory, 'components'),
+      '@constant': path.join(sourceDirectory, 'constant'),
       '@locales': path.join(sourceDirectory, 'locales'),
       '@pages': path.join(sourceDirectory, 'pages'),
       '@themes': path.join(sourceDirectory, 'themes'),
