@@ -1,12 +1,15 @@
-import './locales/index';
-import './assets/css/index.css';
-import App from './App';
 import { createRoot } from 'react-dom/client';
+import '@assets/css/index.css';
+import EvidenceProvider from '@context/EvidenceProvider';
+import AppRouter from '@router/AppRouter';
 
 const element = document.getElementById('root');
 
-
 if (element) {
     createRoot(element)
-        .render(<App />);
+        .render(
+            <EvidenceProvider>
+                <AppRouter />
+            </EvidenceProvider>
+        );
 }

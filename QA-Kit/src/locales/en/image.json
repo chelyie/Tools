@@ -1,5 +1,5 @@
 {
-    "picture": "Picture",
-    "picture_subtext": "Choose a format",
-    "image_description": "Only JPG and PNG formats are supported. The maximum file size is 5MB."
+  "imageFormat": "Image format",
+  "mediaImage": "Image",
+  "download": "Download"
 }
