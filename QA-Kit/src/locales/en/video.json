@@ -1,4 +1,6 @@
 {
-     "video": "Video",
-     "videoDescription": "A video file. The maximum file size is 100MB."
+  "playAll": "Play all",
+  "pauseAll": "Pause all",
+  "downloadVideo": "Download video",
+  "mediaVideo": "Video"
 }
