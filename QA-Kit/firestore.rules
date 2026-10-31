@@ -8,7 +8,7 @@ service cloud.firestore {
     function isTeamMember() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email in ['you@example.com'];
+        && request.auth.token.email in ['michellesonio26@gmail.com'];
     }
 
     match /bugs/{bugId} {
