@@ -1,65 +1,38 @@
-import { CardProps } from '@type/Card.type';
+import { useId, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { classMerge } from '@utils/classMerge';
-import { CARD_STYLE, CARD_RADIUS, CARD_PADDING } from '@constant/cardstyle.constant';
-import { useState } from 'react';
 
-export default function Card({
-    className,
-    title,
-    subtitle,
-    children,
-    footer,
-    interactive = false,
-    dashed = false,
-    style,
-    ...props
-}: CardProps) {
-    const [isHovered, setIsHovered] = useState(false);
+interface CardProps extends Omit<ComponentPropsWithoutRef<'section'>, 'title'> {
+    title?: ReactNode;
+    actions?: ReactNode; // e.g. a count or buttons in the header
+    headingLevel?: 'h2' | 'h3' | 'h4'; // keep the heading hierarchy correct
+}
+
+/**
+ * White box with an optional title and header actions. Use it to group a section of a page.
+ *
+ * @example
+ * <Card title="1. Bug details" actions={<Hint>2 items</Hint>}>...</Card>
+ *
+ * Used in: BugDetailsSection, SlotsSection
+ */
+export default function Card({ title, actions, headingLevel: Heading = 'h2', className, children, ...rest }: CardProps) {
+    const titleId = useId();
 
     return (
-        <div
-            className={classMerge(
-                'tw_flex tw_flex-col',
-                interactive && 'tw_cursor-pointer tw_transition-transform tw_duration-150',
-                className
-            )}
-            style={{
-                borderRadius: CARD_RADIUS,
-                padding: CARD_PADDING,
-                ...(dashed ? CARD_STYLE.DASHED : CARD_STYLE.DEFAULT),
-                ...(interactive && isHovered && CARD_STYLE.INTERACTIVE_HOVER),
-                ...style
-            }}
-            onMouseEnter={() => interactive && setIsHovered(true)}
-            onMouseLeave={() => interactive && setIsHovered(false)}
-            {...props}
+        <section
+            className={classMerge('card', className)}
+            aria-labelledby={title
+                ? titleId
+                : undefined}
+            {...rest}
         >
-            <div className="tw_flex tw_flex-col tw_items-center tw_justify-center tw_flex-1 tw_text-center">
-                {title && (
-                    <h3
-                        className={classMerge(
-                            'tw_font-semibold tw_text-base tw_text-ink dark:tw_text-ink-light',
-                            Boolean(subtitle) && 'tw_mb-1'
-                        )}
-                    >
-                        {title}
-                    </h3>
-                )}
-
-                {subtitle && (
-                    <p className="tw_text-sm tw_text-ink-soft dark:tw_text-ink-lightsoft">
-                        {subtitle}
-                    </p>
-                )}
-
-                {children && <div className="tw_w-full">{children}</div>}
-            </div>
-
-            {footer && (
-                <div className="tw_flex tw_gap-2 tw_mt-4 tw_pt-4 tw_border-t tw_border-border dark:tw_border-border-dark">
-                    {footer}
-                </div>
+            {(title || actions) && (
+                <header className="card__header">
+                    {title && <Heading id={titleId} className="card__title">{title}</Heading>}
+                    {actions && <div className="card__actions">{actions}</div>}
+                </header>
             )}
-        </div>
+            {children}
+        </section>
     );
 }
