@@ -19,13 +19,13 @@
             "@assets/*": ["./src/assets/*"],
             "@components/*": ["./src/components/*"],
             "@locales/*": ["./src/locales/*"],
-            "@pages/*": ["./src/pages/*"],
-            "@themes/*": ["./src/themes/*"],
+            "@pages/*": ["./src/Pages/*"],
             "@type/*": ["./src/type/*"],
             "@utils/*": ["./src/utils/*"],
             "@constant/*": ["./src/constant/*"],
-            "App": ["./src/App"],
-            "Main": ["./src/Main"]
+            "@context/*": ["./src/context/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@router/*": ["./src/router/*"]
         }
     },
     "include": ["vite.config.ts", "src", "src/**/*"]

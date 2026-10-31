@@ -1,21 +1,34 @@
- {
-  "brandname": "QA Evidence",
-  "description": "Choose a format for your evidence",
-  "generate": "Generate evidence",
-  "reset": "Reset / new evidence",
-  "replace": "Replace",
-  "remove": "Remove",
-  "upload": "Upload",
-  "format1": {
-      "title": "Format 1",
-      "devices": "Web + Figma"
-    },
-  "format2": {
-      "title": "Format 2",
-      "devices": "iOS + Android"
-    },
-  "format3": {
-      "title": "Format 3",
-      "devices": "iOS + Android + Web Mobile"
-  }
+{
+  "brandname": "Bug Verification",
+  "newBug": "New bug",
+  "detailsTitle": "1. Bug details",
+  "bugTitleLabel": "Bug title",
+  "bugTitlePlaceholder": "e.g. Button misaligned on mobile checkout",
+  "ticketLabel": "Ticket ID",
+  "slotsTitle": "2. Add images or videos to compare",
+  "slotLabel": "Label shown on collage",
+  "slotLabelPlaceholder": "Type a label",
+  "dropTitle": "Click to upload, or drop a file here",
+  "dropHint": "Image (PNG, JPG, GIF, WebP) or video (MP4, WebM)",
+  "clearFile": "Clear file",
+  "addComparison": "Add comparison",
+  "previewTitle": "Preview",
+  "replaceFile": "Replace file",
+  "addHighlight": "Add highlight",
+  "highlightHelp": "Drag a box to move it, drag its corner to resize it.",
+  "markNumber": "Number",
+  "markColor": "Color",
+  "removeHighlight": "Delete highlight",
+  "downloadFailed": "Could not create the download. Try again.",
+  "recording": "Preparing...",
+  "slotFallback": "Slot {letter}",
+  "newSlotLabel": "Item {letter}",
+  "noFileYet": "{label}: no file yet",
+  "itemCount": "{count} items",
+  "itemCountOne": "{count} item",
+  "addComparisonLabel": "Add another comparison slot",
+  "removeSlot": "Remove slot {letter}",
+  "removeFileFrom": "Remove file from {label}",
+  "uploadForSlot": "Upload image or video for slot {letter}",
+  "notMediaFile": "{name} is not an image or a video."
 }
