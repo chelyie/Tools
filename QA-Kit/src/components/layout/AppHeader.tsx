@@ -23,7 +23,7 @@ export default function AppHeader({ title, icon, actions }: AppHeaderProps) {
                     <div className="app-header__name">{title}</div>
                 </div>
             </div>
-            {actions}
+            {actions && <div className="app-header__actions">{actions}</div>}
         </header>
     );
 }

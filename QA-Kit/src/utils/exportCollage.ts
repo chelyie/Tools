@@ -32,6 +32,7 @@ interface ExportOptions {
 function loadImage(url: string): Promise<Source> {
     return new Promise((resolve) => {
         const img = new Image();
+        img.crossOrigin = 'anonymous'; // saved files come from Cloudinary; keeps the canvas exportable
         img.onload = () => resolve({ el: img, w: img.naturalWidth, h: img.naturalHeight });
         img.onerror = () => resolve(null);
         img.src = url;
