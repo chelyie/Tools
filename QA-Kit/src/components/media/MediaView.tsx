@@ -20,8 +20,8 @@ interface MediaViewProps {
  */
 export default function MediaView({ url, kind, alt, controls = false, className, videoProps }: MediaViewProps) {
     if (kind === 'video') {
-        return <video src={url} muted playsInline preload="metadata" controls={controls} className={className} {...videoProps} />;
+        return <video src={url} crossOrigin="anonymous" muted playsInline preload="metadata" controls={controls} className={className} {...videoProps} />;
     }
 
-    return <img src={url} alt={alt} className={className} />;
+    return <img src={url} crossOrigin="anonymous" alt={alt} className={className} />;
 }

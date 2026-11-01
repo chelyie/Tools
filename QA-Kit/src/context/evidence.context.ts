@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { EvidenceState, Mark } from '@type/Evidence.type';
+import type { EvidenceState, Mark, SavedBug } from '@type/Evidence.type';
 
 export interface EvidenceContextValue {
     state: EvidenceState;
@@ -18,6 +18,11 @@ export interface EvidenceContextValue {
     updateMark: (slotId: number, markId: number, patch: Partial<Mark>) => void;
     removeMark: (slotId: number, markId: number) => void;
     newBug: () => void;
+
+    /** Uploads new files, saves the bug to Firestore and returns its ticket ID. Throws a readable error. */
+    saveBug: () => Promise<string>;
+    /** Opens a saved bug; one saved by someone else opens as a new copy. */
+    loadBug: (bug: SavedBug) => void;
 }
 
 export const EvidenceContext = createContext<EvidenceContextValue | undefined>(undefined);

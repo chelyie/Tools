@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '@assets': path.join(sourceDirectory, 'assets'),
       '@components': path.join(sourceDirectory, 'components'),
+      '@config': path.join(sourceDirectory, 'config'),
       '@constant': path.join(sourceDirectory, 'constant'),
       '@context': path.join(sourceDirectory, 'context'),
       '@hooks': path.join(sourceDirectory, 'hooks'),
