@@ -30,7 +30,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         }
         catch (e) {
             const code = (e as { code?: string }).code ?? '';
-            if (!IGNORED_CODES.includes(code)) setError(translationEN.signInFailed);
+            if (!IGNORED_CODES.includes(code)) setError(`${translationEN.signInFailed} (${code || 'unknown'})`);
         }
     }, []);
 
