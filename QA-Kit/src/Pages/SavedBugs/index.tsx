@@ -10,7 +10,6 @@ import PageLayout from '@components/layout/PageLayout';
 import translationEN from '@locales/en';
 import type { SavedBug } from '@type/Evidence.type';
 import { listBugs } from '@utils/bugStore';
-import { formatTicket } from '@utils/ticket';
 import { fillTemplate } from '@utils/text';
 
 export default function SavedBugsPage() {
@@ -64,11 +63,8 @@ export default function SavedBugsPage() {
                                     : <span className="saved-item__thumb" aria-hidden="true" />}
                                 <div className="saved-item__text">
                                     <strong>{bug.title}</strong>
-                                    <Hint truncate>
-                                        {formatTicket(bug.ticketNo, bug.ticketDay)}
-                                        {' · '}
-                                        {fillTemplate(translationEN.savedBy, { email: bug.ownerEmail })}
-                                        {' · '}
+                                    <Hint truncate>{fillTemplate(translationEN.savedBy, { email: bug.ownerEmail })}</Hint>
+                                    <Hint>
                                         {new Date(bug.updatedAt)
                                             .toLocaleString()}
                                     </Hint>

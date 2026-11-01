@@ -74,7 +74,7 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
     const setSlotLabel = useCallback((id: number, label: string) => dispatch({ type: 'slotPatch', id, patch: { label } }), []);
 
     const setSlotFile = useCallback((id: number, file: File | undefined) => {
-        if (!file) return null;
+        if (!file || stateRef.current.bugId) return null; // a saved bug can't change
         const kind = getMediaKind(file);
         if (!kind) return fillTemplate(translationEN.notMediaFile, { name: file.name });
         revokeSlotUrl(stateRef.current.slots, id);
@@ -90,6 +90,7 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
     }, []);
 
     const clearSlot = useCallback((id: number) => {
+        if (stateRef.current.bugId) return;
         revokeSlotUrl(stateRef.current.slots, id);
         filesRef.current.delete(id);
         dispatch({ type: 'slotPatch', id, patch: EMPTY_MEDIA });
@@ -98,6 +99,7 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
     const addSlot = useCallback(() => dispatch({ type: 'slotAdd' }), []);
 
     const removeSlot = useCallback((id: number) => {
+        if (stateRef.current.bugId) return;
         revokeSlotUrl(stateRef.current.slots, id);
         filesRef.current.delete(id);
         dispatch({ type: 'slotRemove', id });

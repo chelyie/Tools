@@ -9,11 +9,10 @@ import useEvidence from '@hooks/useEvidence';
 import translationEN from '@locales/en';
 import BugDetailsSection from '@pages/BugVerification/sections/BugDetailsSection';
 import CollagePanel from '@pages/BugVerification/sections/collage/CollagePanel';
-import SaveBugButton from '@pages/BugVerification/sections/SaveBugButton';
 import SlotsSection from '@pages/BugVerification/sections/SlotsSection';
 
 export default function BugVerificationPage() {
-    const { newBug } = useEvidence();
+    const { state, newBug } = useEvidence();
     const { user } = useAuth();
 
     const header = (
@@ -22,12 +21,7 @@ export default function BugVerificationPage() {
             icon={<SplitIcon size={20} />}
             actions={(
                 <>
-                    {user && (
-                        <>
-                            <Link to="/bugs" className="btn btn--outline">{translationEN.savedBugs}</Link>
-                            <SaveBugButton />
-                        </>
-                    )}
+                    {user && <Link to="/bugs" className="btn btn--outline">{translationEN.savedBugs}</Link>}
                     <Button icon={<PlusIcon size={16} />} onClick={newBug}>{translationEN.newBug}</Button>
                     <AccountBar />
                 </>
@@ -37,10 +31,11 @@ export default function BugVerificationPage() {
 
     return (
         <PageLayout header={header}>
-            <div className="app-inputs">
+            <fieldset className="app-inputs" disabled={Boolean(state.bugId)}>
+                {state.bugId && <p className="locked-note" role="status">{translationEN.savedLocked}</p>}
                 <BugDetailsSection />
                 <SlotsSection />
-            </div>
+            </fieldset>
             <CollagePanel />
         </PageLayout>
     );

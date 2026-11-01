@@ -2,6 +2,7 @@ import {
     collection, doc, getDoc, getDocs, limit, orderBy, query, runTransaction, serverTimestamp, setDoc, type DocumentData, type Timestamp
 } from 'firebase/firestore';
 import { getFirebaseDb } from '@config/firebase';
+import translationEN from '@locales/en';
 import type { SavedBug, Slot } from '@type/Evidence.type';
 
 const LIST_LIMIT = 50;
@@ -72,4 +73,12 @@ export async function getBug(bugId: string): Promise<SavedBug | null> {
     return snap.exists()
         ? toSavedBug(snap.id, snap.data())
         : null;
+}
+
+/** A readable message for a failed save. */
+export function saveErrorMessage(e: unknown): string {
+    if ((e as { code?: string }).code === 'permission-denied') return translationEN.notOnTeamList;
+    return e instanceof Error && e.message
+        ? e.message
+        : translationEN.saveFailed;
 }

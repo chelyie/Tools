@@ -4,16 +4,17 @@ import useAuth from '@hooks/useAuth';
 import translationEN from '@locales/en';
 
 /**
- * Signed-in email and a Sign out button. Renders nothing when nobody is signed in.
+ * Signed in: the email and a Sign out button. Signed out: a Sign in button. Renders nothing when Firebase isn't set up.
  *
  * @example
  * <AppHeader title="Saved bugs" actions={<AccountBar />} />
  *
- * Used in: BugVerification page, SavedBugs page
+ * Used in: BugVerification page, SavedBugs page, SignIn page
  */
 export default function AccountBar() {
-    const { user, signOut } = useAuth();
-    if (!user) return null;
+    const { configured, user, signIn, signOut } = useAuth();
+    if (!configured) return null;
+    if (!user) return <Button variant="outline" onClick={() => void signIn()}>{translationEN.signIn}</Button>;
 
     return (
         <div className="row row--center">

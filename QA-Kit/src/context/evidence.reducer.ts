@@ -46,7 +46,11 @@ function mapSlot(state: EvidenceState, id: number, fn: (s: Slot) => Slot): Evide
             : s)) };
 }
 
+/** Actions that still work on a saved bug; everything else is an edit, which a saved bug refuses. */
+const ALLOWED_WHEN_SAVED: EvidenceAction['type'][] = ['reset', 'newDay', 'ticket', 'saved'];
+
 export function evidenceReducer(state: EvidenceState, action: EvidenceAction): EvidenceState {
+    if (state.bugId && !ALLOWED_WHEN_SAVED.includes(action.type)) return state;
     switch (action.type) {
     case 'title':
         return { ...state, title: action.title };

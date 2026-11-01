@@ -2,6 +2,7 @@ import IconButton from '@components/button/IconButton';
 import { XIcon } from '@components/icon/icons';
 import MarkOverlay from '@components/media/MarkOverlay';
 import MediaView from '@components/media/MediaView';
+import useEvidence from '@hooks/useEvidence';
 import translationEN from '@locales/en';
 import { classMerge } from '@utils/classMerge';
 import { layoutRatio, slotDisplayLabel } from '@utils/slot';
@@ -10,6 +11,7 @@ import type { CollageShotProps } from '@type/BugVerification.type';
 
 /** One labelled file in the collage preview. */
 export default function CollageShot({ slot, index, onRemove }: CollageShotProps) {
+    const { state } = useEvidence();
     const label = slotDisplayLabel(slot, index);
     const ratio = layoutRatio(slot);
 
@@ -25,9 +27,11 @@ export default function CollageShot({ slot, index, onRemove }: CollageShotProps)
                         <>
                             <MediaView url={slot.url} kind={slot.kind} alt={label} controls />
                             <MarkOverlay marks={slot.marks} />
-                            <IconButton className="shot__remove" label={fillTemplate(translationEN.removeFileFrom, { label })} onClick={onRemove}>
-                                <XIcon size={16} strokeWidth={2.6} />
-                            </IconButton>
+                            {!state.bugId && (
+                                <IconButton className="shot__remove" label={fillTemplate(translationEN.removeFileFrom, { label })} onClick={onRemove}>
+                                    <XIcon size={16} strokeWidth={2.6} />
+                                </IconButton>
+                            )}
                         </>
                     )}
             </div>
