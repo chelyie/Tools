@@ -38,5 +38,18 @@ export interface EvidenceState {
     title: string;
     ticketNo: number;
     ticketDay: string; // the day the ticket number belongs to (YYYYMMDD)
+    bugId: string | null; // the saved bug this edits; null until it is saved
     slots: Slot[];
+}
+
+/** A bug saved in Firestore; slot urls point at the uploaded files. */
+export interface SavedBug {
+    bugId: string;
+    ownerUid: string;
+    ownerEmail: string;
+    title: string;
+    ticketNo: number;
+    ticketDay: string;
+    slots: Slot[];
+    updatedAt: number;
 }

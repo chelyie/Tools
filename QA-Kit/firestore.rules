@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Who may use the tool. Replace the placeholder with your team's Google emails.
+    // Until you do, nobody can read or write (safe by default).
+    function isTeamMember() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in 
+        [
+        'michellesonio26@gmail.com',
+        'michellesonio89@gmail.com'
+        ];
+    }
+
+    match /bugs/{bugId} {
+      allow read: if isTeamMember();
+      allow create: if isTeamMember() && request.resource.data.ownerUid == request.auth.uid;
+      allow update, delete: if isTeamMember() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Shared ticket counter: one document per day (YYYYMMDD).
+    match /counters/{day} {
+      allow read, write: if isTeamMember();
+    }
+  }
+}

@@ -14,7 +14,10 @@ export type EvidenceAction =
     | { type: 'markPatch'; slotId: number; markId: number; patch: Partial<Mark> }
     | { type: 'markRemove'; slotId: number; markId: number }
     | { type: 'reset'; ticketNo: number }
-    | { type: 'newDay'; ticketNo: number };
+    | { type: 'newDay'; ticketNo: number }
+    | { type: 'ticket'; day: string; ticketNo: number }
+    | { type: 'load'; state: EvidenceState }
+    | { type: 'saved'; bugId: string; ticketNo: number };
 
 /** Fields that return a slot to its empty, no-file state. */
 export const EMPTY_MEDIA: Partial<Slot> = { url: '', kind: '', fileName: '', ratio: DEFAULT_RATIO, marks: [] };
@@ -32,6 +35,7 @@ export function createState(ticketNo: number): EvidenceState {
         title: '',
         ticketNo,
         ticketDay: todayStamp(),
+        bugId: null,
         slots: DEFAULT_LABELS.map((label, i) => emptySlot(i + 1, label))
     };
 }
@@ -78,6 +82,16 @@ export function evidenceReducer(state: EvidenceState, action: EvidenceAction): E
     case 'reset':
         return createState(action.ticketNo);
     case 'newDay':
-        return { ...state, ticketNo: action.ticketNo, ticketDay: todayStamp() };
+        return state.bugId
+            ? state
+            : { ...state, ticketNo: action.ticketNo, ticketDay: todayStamp() };
+    case 'ticket': // a shared number from Firestore; never moves a saved bug or another day's ticket
+        return state.bugId || state.ticketDay !== action.day
+            ? state
+            : { ...state, ticketNo: action.ticketNo };
+    case 'load':
+        return action.state;
+    case 'saved':
+        return { ...state, bugId: action.bugId, ticketNo: action.ticketNo };
     }
 }
