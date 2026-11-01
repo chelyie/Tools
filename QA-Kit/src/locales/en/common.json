@@ -37,7 +37,7 @@
   "signInFailed": "Could not sign in. Try again.",
   "signOut": "Sign out",
   "loading": "Loading...",
-  "savedAs": "Saved to history as {ticket}",
+  "savedAs": "Saved to history as {ticket}. Ready for the next report.",
   "downloadNeedsTitle": "Add a bug title before downloading, so the report is saved to history.",
   "downloadedNotSaved": "Downloaded, but not saved to history: {reason} Click Download again to retry.",
   "saveNeedsTitle": "Add a bug title before saving.",
@@ -53,6 +53,5 @@
   "viewBug": "View",
   "backToList": "Back to saved bugs",
   "bugNotFound": "This saved bug was not found.",
-  "savedLocked": "This report is saved to history and can no longer be edited. Click New bug to start another.",
   "signIn": "Sign in"
 }

@@ -1,17 +1,15 @@
 import { useRef } from 'react';
 import ErrorMessage from '@components/feedback/ErrorMessage';
-import Hint from '@components/feedback/Hint';
 import useEvidence from '@hooks/useEvidence';
 import translationEN from '@locales/en';
 import CollagePreview from '@pages/BugVerification/sections/collage/CollagePreview';
 import CollageToolbar from '@pages/BugVerification/sections/collage/CollageToolbar';
 import useCollageDownload from '@hooks/useCollageDownload';
-import { fillTemplate } from '@utils/text';
 
 export default function CollagePanel() {
     const { state } = useEvidence();
     const previewRef = useRef<HTMLDivElement>(null);
-    const { format, setFormat, busy, error, download } = useCollageDownload(previewRef);
+    const { format, setFormat, busy, error, notice, download } = useCollageDownload(previewRef);
     const hasVideo = state.slots.some((s) => s.kind === 'video');
 
     function eachVideo(fn: (video: HTMLVideoElement) => void) {
@@ -37,9 +35,10 @@ export default function CollagePanel() {
                 />
             </div>
 
+            {notice && <p className="notice" role="status">{notice}</p>}
+
             <CollagePreview ref={previewRef} />
             <ErrorMessage message={error} />
-            {state.bugId && <Hint strong>{fillTemplate(translationEN.savedAs, { ticket: state.bugId })}</Hint>}
         </section>
     );
 }

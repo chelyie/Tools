@@ -225,15 +225,12 @@ a.btn { text-decoration: none; }
 
 .saved-view { width: 100%; max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-/* A saved bug is final: the form is disabled and looks it. */
-fieldset.app-inputs { margin: 0; padding: 0; }
-.app-inputs:disabled .card { opacity: 0.7; }
-.app-inputs:disabled .marks--editable, .app-inputs:disabled .mark-box__handle { pointer-events: none; }
-.locked-note {
-    margin: 0; padding: 12px 14px; border: 1px solid var(--line-strong); border-radius: 10px;
-    background: var(--primary-soft); color: var(--ink-2); font-size: 13px; font-weight: 600;
-}
-
 /* Hidden scroll bar: the page still scrolls with the wheel, touch and keyboard. */
 html { scrollbar-width: none; -ms-overflow-style: none; }
 html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+/* Success note under the Preview title, on the left. */
+.notice {
+    margin: 0; align-self: flex-start; padding: 6px 12px; border: 1px solid #b7e4c7; border-radius: 99px;
+    background: #ecfaf1; color: #1b6b3a; font-size: 13px; font-weight: 600; text-align: left;
+}

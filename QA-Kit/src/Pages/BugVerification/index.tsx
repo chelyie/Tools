@@ -12,7 +12,7 @@ import CollagePanel from '@pages/BugVerification/sections/collage/CollagePanel';
 import SlotsSection from '@pages/BugVerification/sections/SlotsSection';
 
 export default function BugVerificationPage() {
-    const { state, newBug } = useEvidence();
+    const { newBug } = useEvidence();
     const { user } = useAuth();
 
     const header = (
@@ -31,11 +31,10 @@ export default function BugVerificationPage() {
 
     return (
         <PageLayout header={header}>
-            <fieldset className="app-inputs" disabled={Boolean(state.bugId)}>
-                {state.bugId && <p className="locked-note" role="status">{translationEN.savedLocked}</p>}
+            <div className="app-inputs">
                 <BugDetailsSection />
                 <SlotsSection />
-            </fieldset>
+            </div>
             <CollagePanel />
         </PageLayout>
     );

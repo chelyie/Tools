@@ -9,22 +9,25 @@ import { fillTemplate } from '@utils/text';
 
 /**
  * Downloads the collage preview as PNG/JPG, or as a video when a slot has one. Pass the ref of the preview element.
- * When signed in, a download also saves the bug to history, so a report can't be downloaded and forgotten.
+ * When signed in, a download also saves the bug to history and then resets the page for the next report,
+ * so a report can't be downloaded and forgotten.
  *
  * @example
- * const { format, setFormat, busy, error, download } = useCollageDownload(previewRef);
+ * const { format, setFormat, busy, error, notice, download } = useCollageDownload(previewRef);
  *
  * Used in: CollagePanel
  */
 export default function useCollageDownload(previewRef: RefObject<HTMLDivElement | null>) {
-    const { state, ticketId, saveBug } = useEvidence();
+    const { state, ticketId, saveBug, newBug } = useEvidence();
     const { user } = useAuth();
     const [format, setFormat] = useState<ImageFormat>('png');
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
+    const [notice, setNotice] = useState('');
 
     async function download() {
         setError('');
+        setNotice('');
         const saves = Boolean(user) && !state.bugId;
         if (saves && !state.title.trim()) {
             setError(translationEN.downloadNeedsTitle);
@@ -42,8 +45,14 @@ export default function useCollageDownload(previewRef: RefObject<HTMLDivElement 
             saveBlob(blob, `${ticketId}.${ext}`);
             if (saves) {
                 // Saved after the file is made, because saving swaps the preview files for the uploaded copies.
-                await saveBug()
-                    .catch((e: unknown) => setError(fillTemplate(translationEN.downloadedNotSaved, { reason: saveErrorMessage(e) })));
+                try {
+                    const bugId = await saveBug();
+                    newBug();
+                    setNotice(fillTemplate(translationEN.savedAs, { ticket: bugId }));
+                }
+                catch (e) {
+                    setError(fillTemplate(translationEN.downloadedNotSaved, { reason: saveErrorMessage(e) }));
+                }
             }
         }
         catch (e) {
@@ -56,5 +65,5 @@ export default function useCollageDownload(previewRef: RefObject<HTMLDivElement 
         }
     }
 
-    return { format, setFormat, busy, error, download };
+    return { format, setFormat, busy, error, notice, download };
 }
