@@ -52,6 +52,5 @@
   "savedBy": "Saved by {email}",
   "viewBug": "View",
   "backToList": "Back to saved bugs",
-  "bugNotFound": "This saved bug was not found.",
-  "signIn": "Sign in"
+  "bugNotFound": "This saved bug was not found."
 }

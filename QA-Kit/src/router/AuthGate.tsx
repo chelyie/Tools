@@ -1,7 +1,4 @@
 import { Outlet } from 'react-router-dom';
-import Hint from '@components/feedback/Hint';
-import AppHeader from '@components/layout/AppHeader';
-import PageLayout from '@components/layout/PageLayout';
 import useAuth from '@hooks/useAuth';
 import translationEN from '@locales/en';
 import SignInPage from '@pages/SignIn';
@@ -11,13 +8,7 @@ export default function AuthGate() {
     const { configured, user, loading } = useAuth();
 
     if (!configured) return <Outlet />;
-    if (loading) {
-        return (
-            <PageLayout header={<AppHeader title={translationEN.brandname} />}>
-                <Hint>{translationEN.loading}</Hint>
-            </PageLayout>
-        );
-    }
+    if (loading) return <div className="auth"><p className="card__text">{translationEN.loading}</p></div>;
     return user
         ? <Outlet />
         : <SignInPage />;

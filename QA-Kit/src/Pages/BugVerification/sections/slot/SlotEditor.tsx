@@ -77,7 +77,7 @@ export default function SlotEditor({ slot, index }: SlotEditorProps) {
                     <DropZone
                         title={translationEN.dropTitle}
                         hint={translationEN.dropHint}
-                        icon={<UploadIcon size={28} stroke="#2F5BEA" />}
+                        icon={<UploadIcon size={28} stroke="#D6246E" />}
                         accept={ACCEPT_MEDIA}
                         label={fillTemplate(translationEN.uploadForSlot, { letter })}
                         onFile={acceptFile}
