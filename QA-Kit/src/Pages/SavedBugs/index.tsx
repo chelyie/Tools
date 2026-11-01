@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '@components/button/Button';
+import { Link } from 'react-router-dom';
 import Card from '@components/card/Card';
 import ErrorMessage from '@components/feedback/ErrorMessage';
 import Hint from '@components/feedback/Hint';
@@ -8,7 +7,6 @@ import { SplitIcon } from '@components/icon/icons';
 import AccountBar from '@components/layout/AccountBar';
 import AppHeader from '@components/layout/AppHeader';
 import PageLayout from '@components/layout/PageLayout';
-import useEvidence from '@hooks/useEvidence';
 import translationEN from '@locales/en';
 import type { SavedBug } from '@type/Evidence.type';
 import { listBugs } from '@utils/bugStore';
@@ -16,8 +14,6 @@ import { formatTicket } from '@utils/ticket';
 import { fillTemplate } from '@utils/text';
 
 export default function SavedBugsPage() {
-    const { loadBug } = useEvidence();
-    const navigate = useNavigate();
     const [bugs, setBugs] = useState<SavedBug[] | null>(null);
     const [error, setError] = useState('');
 
@@ -38,11 +34,6 @@ export default function SavedBugsPage() {
             active = false;
         };
     }, []);
-
-    function open(bug: SavedBug) {
-        loadBug(bug);
-        void navigate('/');
-    }
 
     const header = (
         <AppHeader
@@ -82,7 +73,7 @@ export default function SavedBugsPage() {
                                             .toLocaleString()}
                                     </Hint>
                                 </div>
-                                <Button variant="outline" onClick={() => open(bug)}>{translationEN.openBug}</Button>
+                                <Link to={`/bugs/${encodeURIComponent(bug.bugId)}`} className="btn btn--outline">{translationEN.viewBug}</Link>
                             </li>
                         );
                     })}

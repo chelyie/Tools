@@ -1,5 +1,5 @@
 import {
-    collection, doc, getDoc, getDocs, limit, orderBy, query, runTransaction, serverTimestamp, setDoc, type Timestamp
+    collection, doc, getDoc, getDocs, limit, orderBy, query, runTransaction, serverTimestamp, setDoc, type DocumentData, type Timestamp
 } from 'firebase/firestore';
 import { getFirebaseDb } from '@config/firebase';
 import type { SavedBug, Slot } from '@type/Evidence.type';
@@ -47,20 +47,29 @@ export async function saveBugDoc(owner: Owner, bug: BugInput): Promise<void> {
     });
 }
 
+function toSavedBug(id: string, data: DocumentData): SavedBug {
+    const updated = data.updatedAt as Timestamp | null;
+    return {
+        bugId: id,
+        ownerUid: String(data.ownerUid ?? ''),
+        ownerEmail: String(data.ownerEmail ?? ''),
+        title: String(data.title ?? ''),
+        ticketNo: Number(data.ticketNo) || 1,
+        ticketDay: String(data.ticketDay ?? ''),
+        slots: (data.slots ?? []) as Slot[],
+        updatedAt: updated?.toMillis() ?? Date.now()
+    };
+}
+
 export async function listBugs(): Promise<SavedBug[]> {
     const snap = await getDocs(query(collection(getFirebaseDb(), 'bugs'), orderBy('updatedAt', 'desc'), limit(LIST_LIMIT)));
-    return snap.docs.map((d) => {
-        const data = d.data();
-        const updated = data.updatedAt as Timestamp | null;
-        return {
-            bugId: d.id,
-            ownerUid: String(data.ownerUid ?? ''),
-            ownerEmail: String(data.ownerEmail ?? ''),
-            title: String(data.title ?? ''),
-            ticketNo: Number(data.ticketNo) || 1,
-            ticketDay: String(data.ticketDay ?? ''),
-            slots: (data.slots ?? []) as Slot[],
-            updatedAt: updated?.toMillis() ?? Date.now()
-        };
-    });
+    return snap.docs.map((d) => toSavedBug(d.id, d.data()));
+}
+
+/** One saved bug, or null when it doesn't exist. */
+export async function getBug(bugId: string): Promise<SavedBug | null> {
+    const snap = await getDoc(doc(getFirebaseDb(), 'bugs', bugId));
+    return snap.exists()
+        ? toSavedBug(snap.id, snap.data())
+        : null;
 }

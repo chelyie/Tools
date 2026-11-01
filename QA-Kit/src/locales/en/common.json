@@ -47,8 +47,12 @@
   "uploadFailed": "Could not upload {name}. Try again.",
   "savedBugs": "Saved bugs",
   "noSavedBugs": "No saved bugs yet.",
-  "openBug": "Open",
   "backToBug": "Back to bug",
   "loadFailed": "Could not load the saved bugs.",
-  "savedBy": "Saved by {email}"
+  "savedBy": "Saved by {email}",
+  "viewBug": "View",
+  "savedDone": "Saved",
+  "backToList": "Back to saved bugs",
+  "bugNotFound": "This saved bug was not found.",
+  "savedHistoryHint": "Saved bugs are final and can no longer be edited."
 }

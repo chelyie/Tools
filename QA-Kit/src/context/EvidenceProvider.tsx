@@ -7,7 +7,7 @@ import { createState, EMPTY_MEDIA, evidenceReducer, nextMarkId } from '@context/
 import { isFirebaseConfigured } from '@config/firebase';
 import useAuth from '@hooks/useAuth';
 import translationEN from '@locales/en';
-import type { Mark, SavedBug, Slot } from '@type/Evidence.type';
+import type { Mark, Slot } from '@type/Evidence.type';
 import { claimTicket, peekTicket, saveBugDoc } from '@utils/bugStore';
 import { uploadMedia } from '@utils/cloudinaryUpload';
 import { getMediaKind, measureMedia, revokeUrl } from '@utils/evidenceFiles';
@@ -123,30 +123,10 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
         void refreshTicket(todayStamp());
     }, [refreshTicket]);
 
-    const loadBug = useCallback((bug: SavedBug) => {
-        stateRef.current.slots.forEach((s) => revokeUrl(s.url));
-        filesRef.current.clear();
-        const mine = bug.ownerUid === uid;
-        dispatch({
-            type: 'load',
-            state: {
-                title: bug.title,
-                ticketNo: bug.ticketNo,
-                ticketDay: mine
-                    ? bug.ticketDay
-                    : todayStamp(),
-                bugId: mine
-                    ? bug.bugId
-                    : null,
-                slots: bug.slots
-            }
-        });
-        if (!mine) void refreshTicket(todayStamp());
-    }, [uid, refreshTicket]);
-
     const saveBug = useCallback(async() => {
         if (!user) throw new Error(translationEN.notOnTeamList);
         const start = stateRef.current;
+        if (start.bugId) return start.bugId; // a saved bug is final
         if (!start.title.trim()) throw new Error(translationEN.saveNeedsTitle);
 
         // 1. Upload the files that are still on this computer, then point the slots at the uploaded copies.
@@ -183,9 +163,9 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
 
     const value = useMemo(
         () => ({
-            state, ticketId, setTitle, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug, loadBug
+            state, ticketId, setTitle, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug
         }),
-        [state, ticketId, setTitle, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug, loadBug]
+        [state, ticketId, setTitle, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug]
     );
 
     return <EvidenceContext.Provider value={value}>{children}</EvidenceContext.Provider>;

@@ -15,17 +15,15 @@ function readableError(e: unknown): string {
 
 /** Uploads the files and saves the bug for the team, then says which ticket it was saved as. */
 export default function SaveBugButton() {
-    const { saveBug } = useEvidence();
+    const { state, saveBug } = useEvidence();
     const [busy, setBusy] = useState(false);
-    const [saved, setSaved] = useState('');
     const [error, setError] = useState('');
 
     async function save() {
         setBusy(true);
-        setSaved('');
         setError('');
         try {
-            setSaved(fillTemplate(translationEN.savedAs, { ticket: await saveBug() }));
+            await saveBug();
         }
         catch (e) {
             setError(readableError(e));
@@ -35,12 +33,14 @@ export default function SaveBugButton() {
 
     return (
         <>
-            {saved && <Hint strong>{saved}</Hint>}
+            {state.bugId && <Hint strong>{fillTemplate(translationEN.savedAs, { ticket: state.bugId })}</Hint>}
             <ErrorMessage message={error} />
-            <Button variant="outline" onClick={() => void save()} disabled={busy}>
+            <Button variant="outline" onClick={() => void save()} disabled={busy || Boolean(state.bugId)}>
                 {busy
                     ? translationEN.saving
-                    : translationEN.saveBug}
+                    : state.bugId
+                        ? translationEN.savedDone
+                        : translationEN.saveBug}
             </Button>
         </>
     );

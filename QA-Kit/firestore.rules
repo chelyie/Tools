@@ -18,7 +18,8 @@ service cloud.firestore {
     match /bugs/{bugId} {
       allow read: if isTeamMember();
       allow create: if isTeamMember() && request.resource.data.ownerUid == request.auth.uid;
-      allow update, delete: if isTeamMember() && resource.data.ownerUid == request.auth.uid;
+      // Saved bugs are a final history: they can't be changed or deleted from the app.
+      allow update, delete: if false;
     }
 
     // Shared ticket counter: one document per day (YYYYMMDD).

@@ -16,7 +16,6 @@ export type EvidenceAction =
     | { type: 'reset'; ticketNo: number }
     | { type: 'newDay'; ticketNo: number }
     | { type: 'ticket'; day: string; ticketNo: number }
-    | { type: 'load'; state: EvidenceState }
     | { type: 'saved'; bugId: string; ticketNo: number };
 
 /** Fields that return a slot to its empty, no-file state. */
@@ -89,8 +88,6 @@ export function evidenceReducer(state: EvidenceState, action: EvidenceAction): E
         return state.bugId || state.ticketDay !== action.day
             ? state
             : { ...state, ticketNo: action.ticketNo };
-    case 'load':
-        return action.state;
     case 'saved':
         return { ...state, bugId: action.bugId, ticketNo: action.ticketNo };
     }
