@@ -16,7 +16,7 @@ export default function AccountBar() {
     if (!user) return null;
 
     return (
-        <div className="row row--center">
+        <div className="row row--center account-bar">
             <Hint truncate>{user.email}</Hint>
             <Button variant="link" onClick={() => void signOut()}>{translationEN.signOut}</Button>
         </div>

@@ -41,7 +41,7 @@ button:focus-visible, input:focus-visible { outline: var(--focus); outline-offse
     padding: 16px 32px; border-bottom: 1px solid rgba(201, 205, 214, 0.45);
     /* Sticky and see-through: the page shows through, blurred so text under it stays readable. */
     position: sticky; top: 0; z-index: 10;
-    background: rgba(243, 244, 247, 0.55); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    background: rgba(243, 244, 247, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 .app-header__brand { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
 .app-header__name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
@@ -232,9 +232,9 @@ a.btn { text-decoration: none; }
 html { scrollbar-width: none; -ms-overflow-style: none; }
 html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
-/* Success note under the Preview title, on the left. */
+/* Notes under the Preview title, on the left: green when saved, red for a warning. */
 .notice {
-    margin: 0; align-self: flex-start; padding: 6px 12px; border: 1px solid #b7e4c7; border-radius: 99px;
+    margin: 0; align-self: flex-start; padding: 6px 12px; border: 1px solid #b7e4c7; border-radius: 14px;
     background: #ecfaf1; color: #1b6b3a; font-size: 13px; font-weight: 600; text-align: left;
 }
 
@@ -286,3 +286,35 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
 .drop:hover { border-color: var(--primary); background: var(--primary-soft); }
 .saved-item { transition: border-color 0.12s, background-color 0.12s; }
 .saved-item:hover { border-color: var(--primary); background: var(--primary-soft); }
+
+.notice--error { border-color: #f0b4b0; background: #fff1f0; color: #b42318; }
+
+/* ---------- Phones and small screens ---------- */
+@media (max-width: 760px) {
+    /* Keep the sticky bar slim: smaller padding, and the email hides so Sign out fits beside the other buttons. */
+    .app-header { padding-top: 10px; padding-bottom: 10px; gap: 8px 12px; }
+    .app-header__actions { gap: 8px; flex: 1 1 auto; justify-content: flex-end; }
+    .account-bar .hint { display: none; }
+    .app-main { padding-top: 16px; padding-bottom: 32px; gap: 16px; }
+    .card--collage { padding: 16px; }
+    /* 16px text stops iPhones from zooming into a field when it is tapped. */
+    .field, .field--select, input, select, textarea { font-size: 16px; }
+    /* The colour dots sit in a tidy grid with finger-sized targets. */
+    .swatches { display: grid; grid-template-columns: repeat(4, 1fr); justify-items: center; gap: 10px; }
+    .swatch { width: 40px; height: 40px; }
+    .saved-item { flex-wrap: wrap; }
+    .saved-item__thumb { flex-basis: 56px; width: 56px; height: 42px; }
+    .saved-item .btn { margin-left: auto; }
+}
+@media (max-width: 520px) {
+    .auth { padding: 16px; }
+    .auth__card { padding: 32px 22px; border-radius: 18px; }
+    .auth__card .card__title { font-size: 22px; }
+    .auth__card .card__text { font-size: 15px; }
+    .app-header__name { font-size: 15px; }
+}
+/* Touch screens: a bigger resize handle on highlight boxes. */
+@media (pointer: coarse) {
+    .mark-box__handle { width: 26px; height: 26px; right: -13px; bottom: -13px; }
+    .btn, .icon-btn { min-height: 44px; }
+}

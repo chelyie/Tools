@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import ErrorMessage from '@components/feedback/ErrorMessage';
 import useEvidence from '@hooks/useEvidence';
 import translationEN from '@locales/en';
 import CollagePreview from '@pages/BugVerification/sections/collage/CollagePreview';
@@ -36,9 +35,9 @@ export default function CollagePanel() {
             </div>
 
             {notice && <p className="notice" role="status">{notice}</p>}
+            {error && <p className="notice notice--error" role="alert">{error}</p>}
 
             <CollagePreview ref={previewRef} />
-            <ErrorMessage message={error} />
         </section>
     );
 }
