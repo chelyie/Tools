@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import CollageToolbar from '@pages/BugVerification/sections/collage/CollageToolbar';
 import ErrorMessage from '@components/feedback/ErrorMessage';
 import Hint from '@components/feedback/Hint';
-import { SplitIcon } from '@components/icon/icons';
 import AccountBar from '@auth/AccountBar';
 import AppHeader from '@components/layout/AppHeader';
 import PageLayout from '@components/layout/PageLayout';
@@ -68,7 +67,6 @@ export default function SavedBugDetail() {
     const header = (
         <AppHeader
             title={bugId}
-            icon={<SplitIcon size={20} />}
             actions={(
                 <>
                     <Link to="/bugs" className="btn btn--outline">{translationEN.backToList}</Link>
@@ -113,4 +111,4 @@ export default function SavedBugDetail() {
             </div>
         </PageLayout>
     );
-}
+}

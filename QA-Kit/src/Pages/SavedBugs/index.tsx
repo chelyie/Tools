@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Card from '@components/card/Card';
 import ErrorMessage from '@components/feedback/ErrorMessage';
 import Hint from '@components/feedback/Hint';
-import { SplitIcon } from '@components/icon/icons';
 import AccountBar from '@auth/AccountBar';
 import AppHeader from '@components/layout/AppHeader';
 import PageLayout from '@components/layout/PageLayout';
@@ -37,7 +36,6 @@ export default function SavedBugsPage() {
     const header = (
         <AppHeader
             title={translationEN.savedBugs}
-            icon={<SplitIcon size={20} />}
             actions={(
                 <>
                     <Link to="/" className="btn btn--outline">{translationEN.backToBug}</Link>
@@ -77,4 +75,4 @@ export default function SavedBugsPage() {
             </Card>
         </PageLayout>
     );
-}
+}

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Button from '@components/button/Button';
-import { PlusIcon, SplitIcon } from '@components/icon/icons';
+import { PlusIcon } from '@components/icon/icons';
 import AccountBar from '@auth/AccountBar';
 import AppHeader from '@components/layout/AppHeader';
 import PageLayout from '@components/layout/PageLayout';
@@ -17,27 +17,23 @@ export default function BugVerificationPage({ kind }: { kind: EvidenceKind }) {
     const { newBug } = useEvidence();
     const { user } = useAuth();
 
+    function navClass({ isActive }: { isActive: boolean }) {
+        return `btn btn--outline btn--nav${isActive
+            ? ' is-active'
+            : ''}`;
+    }
+
     const header = (
         <AppHeader
-            title={isFix
-                ? translationEN.fixBrandname
-                : translationEN.brandname}
-            icon={<SplitIcon size={20} />}
+            nav={(
+                <>
+                    <NavLink to="/" end className={navClass}>{translationEN.brandname}</NavLink>
+                    <NavLink to="/fixed" className={navClass}>{translationEN.fixBrandname}</NavLink>
+                </>
+            )}
             actions={(
                 <>
-                    <Link to={isFix
-                        ? '/'
-                        : '/fixed'} className="btn btn--outline"
-                    >
-                        {isFix
-                            ? translationEN.brandname
-                            : translationEN.fixBrandname}
-                    </Link>
                     {user && <Link to="/bugs" className="btn btn--outline">{translationEN.savedBugs}</Link>}
-                    <Button icon={<PlusIcon size={16} />} onClick={newBug}>{isFix
-                        ? translationEN.newFix
-                        : translationEN.newBug}
-                    </Button>
                     <AccountBar />
                 </>
             )}
@@ -46,7 +42,13 @@ export default function BugVerificationPage({ kind }: { kind: EvidenceKind }) {
 
     return (
         <PageLayout header={header}>
-            <div className="app-inputs">
+            <div className="app-inputs" data-kind={kind}>
+                <div>
+                    <Button icon={<PlusIcon size={16} />} onClick={newBug}>{isFix
+                        ? translationEN.newFix
+                        : translationEN.newBug}
+                    </Button>
+                </div>
                 <SlotsSection />
             </div>
             <CollagePanel />
