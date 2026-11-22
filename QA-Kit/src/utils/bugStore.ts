@@ -3,7 +3,7 @@ import {
 } from 'firebase/firestore';
 import { getFirebaseDb } from '@config/firebase';
 import translationEN from '@locales/en';
-import type { SavedBug, Slot } from '@type/Evidence.type';
+import type { EvidenceKind, SavedBug, Slot } from '@type/Evidence.type';
 
 const LIST_LIMIT = 50;
 
@@ -12,20 +12,27 @@ interface Owner {
     email: string;
 }
 
-export type BugInput = Pick<SavedBug, 'bugId' | 'title' | 'ticketNo' | 'ticketDay' | 'slots'>;
+export type BugInput = Pick<SavedBug, 'bugId' | 'kind' | 'ticketNo' | 'ticketDay' | 'slots'>;
+
+/** Each kind of report counts its own tickets, so BUG and FIXED numbers never collide. */
+function counterId(day: string, kind: EvidenceKind): string {
+    return kind === 'bug'
+        ? day
+        : `${kind}-${day}`;
+}
 
 /** The next ticket number for the day, without using it. */
-export async function peekTicket(day: string): Promise<number> {
-    const snap = await getDoc(doc(getFirebaseDb(), 'counters', day));
+export async function peekTicket(day: string, kind: EvidenceKind = 'bug'): Promise<number> {
+    const snap = await getDoc(doc(getFirebaseDb(), 'counters', counterId(day, kind)));
     return (snap.exists()
         ? Number(snap.data().n) || 0
         : 0) + 1;
 }
 
 /** Takes the next ticket number for the day; two people can never get the same one. */
-export function claimTicket(day: string): Promise<number> {
+export function claimTicket(day: string, kind: EvidenceKind = 'bug'): Promise<number> {
     const db = getFirebaseDb();
-    const ref = doc(db, 'counters', day);
+    const ref = doc(db, 'counters', counterId(day, kind));
     return runTransaction(db, async(tx) => {
         const snap = await tx.get(ref);
         const n = (snap.exists()
@@ -40,7 +47,7 @@ export async function saveBugDoc(owner: Owner, bug: BugInput): Promise<void> {
     await setDoc(doc(getFirebaseDb(), 'bugs', bug.bugId), {
         ownerUid: owner.uid,
         ownerEmail: owner.email,
-        title: bug.title,
+        kind: bug.kind,
         ticketNo: bug.ticketNo,
         ticketDay: bug.ticketDay,
         slots: bug.slots,
@@ -52,9 +59,11 @@ function toSavedBug(id: string, data: DocumentData): SavedBug {
     const updated = data.updatedAt as Timestamp | null;
     return {
         bugId: id,
+        kind: data.kind === 'fixed'
+            ? 'fixed'
+            : 'bug',
         ownerUid: String(data.ownerUid ?? ''),
         ownerEmail: String(data.ownerEmail ?? ''),
-        title: String(data.title ?? ''),
         ticketNo: Number(data.ticketNo) || 1,
         ticketDay: String(data.ticketDay ?? ''),
         slots: (data.slots ?? []) as Slot[],
@@ -81,4 +90,4 @@ export function saveErrorMessage(e: unknown): string {
     return e instanceof Error && e.message
         ? e.message
         : translationEN.saveFailed;
-}
+}

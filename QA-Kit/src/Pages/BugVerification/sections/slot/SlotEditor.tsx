@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ClipboardEvent } from 'react';
 import IconButton from '@components/button/IconButton';
 import ErrorMessage from '@components/feedback/ErrorMessage';
 import Hint from '@components/feedback/Hint';
@@ -12,6 +12,7 @@ import HighlightToolbar from '@pages/BugVerification/sections/slot/HighlightTool
 import SelectedMarkControls from '@pages/BugVerification/sections/slot/SelectedMarkControls';
 import SlotFileActions from '@pages/BugVerification/sections/slot/SlotFileActions';
 import SlotMediaFrame from '@pages/BugVerification/sections/slot/SlotMediaFrame';
+import { pastedFile } from '@utils/fileInput';
 import { slotDisplayLabel, slotLetter } from '@utils/slot';
 import { fillTemplate } from '@utils/text';
 import type { SlotEditorProps } from '@type/BugVerification.type';
@@ -31,6 +32,14 @@ export default function SlotEditor({ slot, index }: SlotEditorProps) {
         setError(setSlotFile(slot.id, file) ?? '');
     }
 
+    // Ctrl+V while this card is focused: a copied screenshot or file goes straight into it.
+    function onPaste(e: ClipboardEvent<HTMLDivElement>) {
+        const file = pastedFile(e.clipboardData);
+        if (!file) return; // plain text pastes into the label as usual
+        e.preventDefault();
+        acceptFile(file);
+    }
+
     function pickColor(c: string) {
         setColor(c);
         if (selected) updateMark(slot.id, selected.id, { color: c });
@@ -47,7 +56,7 @@ export default function SlotEditor({ slot, index }: SlotEditorProps) {
     }
 
     return (
-        <div className="slot">
+        <div className="slot" tabIndex={-1} onPaste={onPaste}>
             <div className="row row--center row--end">
                 <InputField
                     label={translationEN.slotLabel}
@@ -107,4 +116,4 @@ export default function SlotEditor({ slot, index }: SlotEditorProps) {
             )}
         </div>
     );
-}
+}

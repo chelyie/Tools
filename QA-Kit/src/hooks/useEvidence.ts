@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { EvidenceContext, type EvidenceContextValue } from '@context/evidence.context';
+import { EvidenceContext, type EvidenceContextValue } from '@evidence/evidence.context';
 
 /**
- * Reads and changes the current bug: title, ticket ID, slots and highlights. Works in any component inside <EvidenceProvider> (already wrapped around the app in Main.tsx).
+ * Reads and changes the current bug: ticket ID, slots and highlights. Works in any component inside <EvidenceProvider> (already wrapped around the app in Main.tsx).
  *
  * @example
- * const { state, ticketId, setTitle, addSlot } = useEvidence();
+ * const { state, ticketId, addSlot } = useEvidence();
  *
  * Used in: BugVerification page, all its sections, useCollageDownload
  */

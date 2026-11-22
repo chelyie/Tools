@@ -50,10 +50,11 @@ export interface CollageShotProps {
 
 export interface CollageToolbarProps {
     hasVideo: boolean;
+    saveLabel?: string; // replaces the Download text, e.g. Save when signed in
     format: ImageFormat;
     busy: boolean;
     onFormatChange: (format: ImageFormat) => void;
     onDownload: () => void;
     onPlayAll: () => void;
     onPauseAll: () => void;
-}
+}

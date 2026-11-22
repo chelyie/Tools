@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import Card from '@components/card/Card';
 import ErrorMessage from '@components/feedback/ErrorMessage';
 import Hint from '@components/feedback/Hint';
-import { SplitIcon } from '@components/icon/icons';
-import AccountBar from '@components/layout/AccountBar';
+import AccountBar from '@auth/AccountBar';
 import AppHeader from '@components/layout/AppHeader';
 import PageLayout from '@components/layout/PageLayout';
 import translationEN from '@locales/en';
@@ -37,7 +36,6 @@ export default function SavedBugsPage() {
     const header = (
         <AppHeader
             title={translationEN.savedBugs}
-            icon={<SplitIcon size={20} />}
             actions={(
                 <>
                     <Link to="/" className="btn btn--outline">{translationEN.backToBug}</Link>
@@ -62,7 +60,7 @@ export default function SavedBugsPage() {
                                     ? <img src={cover.url} alt="" className="saved-item__thumb" />
                                     : <span className="saved-item__thumb" aria-hidden="true" />}
                                 <div className="saved-item__text">
-                                    <strong>{bug.title}</strong>
+                                    <strong>{bug.bugId}</strong>
                                     <Hint truncate>{fillTemplate(translationEN.savedBy, { email: bug.ownerEmail })}</Hint>
                                     <Hint>
                                         {new Date(bug.updatedAt)

@@ -24,7 +24,8 @@
             "@utils/*": ["./src/utils/*"],
             "@config/*": ["./src/config/*"],
             "@constant/*": ["./src/constant/*"],
-            "@context/*": ["./src/context/*"],
+            "@auth/*": ["./src/auth/*"],
+            "@evidence/*": ["./src/evidence/*"],
             "@hooks/*": ["./src/hooks/*"],
             "@router/*": ["./src/router/*"]
         }

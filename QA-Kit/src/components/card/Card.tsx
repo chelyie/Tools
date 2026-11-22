@@ -13,7 +13,7 @@ interface CardProps extends Omit<ComponentPropsWithoutRef<'section'>, 'title'> {
  * @example
  * <Card title="1. Bug details" actions={<Hint>2 items</Hint>}>...</Card>
  *
- * Used in: BugDetailsSection, SlotsSection
+ * Used in: SlotsSection
  */
 export default function Card({ title, actions, headingLevel: Heading = 'h2', className, children, ...rest }: CardProps) {
     const titleId = useId();

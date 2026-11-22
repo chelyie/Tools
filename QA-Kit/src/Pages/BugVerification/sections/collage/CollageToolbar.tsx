@@ -6,9 +6,10 @@ import translationEN from '@locales/en';
 import type { CollageToolbarProps } from '@type/BugVerification.type';
 
 /** Play / pause controls when there are videos, otherwise the image format picker, plus download. */
-export default function CollageToolbar({ hasVideo, format, busy, onFormatChange, onDownload, onPlayAll, onPauseAll }: CollageToolbarProps) {
+export default function CollageToolbar({ hasVideo, saveLabel, format, busy, onFormatChange, onDownload, onPlayAll, onPauseAll }: CollageToolbarProps) {
     let downloadText = translationEN.download;
     if (busy) downloadText = translationEN.recording;
+    else if (saveLabel) downloadText = saveLabel;
     else if (hasVideo) downloadText = translationEN.downloadVideo;
 
     return (
@@ -26,4 +27,4 @@ export default function CollageToolbar({ hasVideo, format, busy, onFormatChange,
             </Button>
         </div>
     );
-}
+}

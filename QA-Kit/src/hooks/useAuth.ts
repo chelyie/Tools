@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthContext, type AuthContextValue } from '@context/auth.context';
+import { AuthContext, type AuthContextValue } from '@auth/auth.context';
 
 /**
  * Who is signed in with Google, plus signIn / signOut. Works in any component inside <AuthProvider>.

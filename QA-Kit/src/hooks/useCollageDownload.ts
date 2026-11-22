@@ -8,12 +8,12 @@ import { exportCollage, saveBlob } from '@utils/exportCollage';
 import { fillTemplate } from '@utils/text';
 
 /**
- * Downloads the collage preview as PNG/JPG, or as a video when a slot has one. Pass the ref of the preview element.
- * When signed in, a download also saves the bug to history and then resets the page for the next report,
- * so a report can't be downloaded and forgotten.
+ * Saves the collage preview to history and/or downloads it as PNG/JPG (a video when a slot has one).
+ * Pass the ref of the preview element. When signed in, saving resets the page for the next report.
  *
  * @example
- * const { format, setFormat, busy, error, notice, download } = useCollageDownload(previewRef);
+ * const { format, setFormat, busy, error, notice, canSave, run } = useCollageDownload(previewRef);
+ * await run(true); // save and download;  run(false) saves only
  *
  * Used in: CollagePanel
  */
@@ -24,34 +24,30 @@ export default function useCollageDownload(previewRef: RefObject<HTMLDivElement 
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
     const [notice, setNotice] = useState('');
+    const canSave = Boolean(user) && !state.bugId;
 
-    async function download() {
+    async function run(download: boolean) {
         setError('');
         setNotice('');
-        const saves = Boolean(user) && !state.bugId;
-        if (saves && !state.title.trim()) {
-            setError(translationEN.downloadNeedsTitle);
-            return;
-        }
         setBusy(true);
         try {
-            const { blob, ext } = await exportCollage({
-                ticket: ticketId,
-                title: state.title.trim(),
-                slots: state.slots,
-                preview: previewRef.current,
-                format
-            });
-            saveBlob(blob, `${ticketId}.${ext}`);
-            if (saves) {
+            if (download || !canSave) {
+                const { blob, ext } = await exportCollage({ ticket: ticketId, slots: state.slots, preview: previewRef.current, format });
+                saveBlob(blob, `${ticketId}.${ext}`);
+            }
+            if (canSave) {
                 // Saved after the file is made, because saving swaps the preview files for the uploaded copies.
                 try {
                     const bugId = await saveBug();
                     newBug();
-                    setNotice(fillTemplate(translationEN.savedAs, { ticket: bugId }));
+                    setNotice(fillTemplate(download
+                        ? translationEN.savedAs
+                        : translationEN.savedOnly, { ticket: bugId }));
                 }
                 catch (e) {
-                    setError(fillTemplate(translationEN.downloadedNotSaved, { reason: saveErrorMessage(e) }));
+                    setError(download
+                        ? fillTemplate(translationEN.downloadedNotSaved, { reason: saveErrorMessage(e) })
+                        : saveErrorMessage(e));
                 }
             }
         }
@@ -65,5 +61,5 @@ export default function useCollageDownload(previewRef: RefObject<HTMLDivElement 
         }
     }
 
-    return { format, setFormat, busy, error, notice, download };
-}
+    return { format, setFormat, busy, error, notice, canSave, run };
+}

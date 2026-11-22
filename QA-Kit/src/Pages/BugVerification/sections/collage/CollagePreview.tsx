@@ -8,13 +8,11 @@ import type { CollagePreviewProps } from '@type/BugVerification.type';
 /** The collage card exactly as it will be downloaded. */
 export default function CollagePreview({ ref }: CollagePreviewProps) {
     const { state, ticketId, clearSlot } = useEvidence();
-    const title = state.title.trim();
 
     return (
         <div className="card card--collage" ref={ref}>
             <div className="collage-head__text">
                 <div><Hint strong>{ticketId}</Hint></div>
-                {title && <div className="collage-title">{title}</div>}
             </div>
 
             <div className="collage-grid">
@@ -30,4 +28,4 @@ export default function CollagePreview({ ref }: CollagePreviewProps) {
             </div>
         </div>
     );
-}
+}
