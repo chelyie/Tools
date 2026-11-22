@@ -1,5 +1,7 @@
 export type MediaKind = 'image' | 'video';
 export type ImageFormat = 'png' | 'jpg';
+/** Which page a report belongs to: a reported bug, or the check that a bug is fixed. */
+export type EvidenceKind = 'bug' | 'fixed';
 
 /** A numbered highlight box; x, y, w, h are percentages of the media frame. */
 export interface Mark {
@@ -35,7 +37,6 @@ export interface MarkColor {
 }
 
 export interface EvidenceState {
-    title: string;
     ticketNo: number;
     ticketDay: string; // the day the ticket number belongs to (YYYYMMDD)
     bugId: string | null; // the saved bug this edits; null until it is saved
@@ -45,11 +46,11 @@ export interface EvidenceState {
 /** A bug saved in Firestore; slot urls point at the uploaded files. */
 export interface SavedBug {
     bugId: string;
+    kind: EvidenceKind;
     ownerUid: string;
     ownerEmail: string;
-    title: string;
     ticketNo: number;
     ticketDay: string;
     slots: Slot[];
     updatedAt: number;
-}
+}

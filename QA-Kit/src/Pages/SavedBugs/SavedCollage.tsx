@@ -1,3 +1,4 @@
+import type { Ref } from 'react';
 import Hint from '@components/feedback/Hint';
 import MarkOverlay from '@components/media/MarkOverlay';
 import MediaView from '@components/media/MediaView';
@@ -9,12 +10,11 @@ import { fillTemplate } from '@utils/text';
 import { formatTicket } from '@utils/ticket';
 
 /** A saved bug laid out like the collage preview, for looking at only (nothing can be changed). */
-export default function SavedCollage({ bug }: { bug: SavedBug }) {
+export default function SavedCollage({ bug, ref }: { bug: SavedBug; ref?: Ref<HTMLDivElement> }) {
     return (
-        <div className="card card--collage">
+        <div className="card card--collage" ref={ref}>
             <div className="collage-head__text">
-                <div><Hint strong>{formatTicket(bug.ticketNo, bug.ticketDay)}</Hint></div>
-                {bug.title && <div className="collage-title">{bug.title}</div>}
+                <div><Hint strong>{formatTicket(bug.ticketNo, bug.ticketDay, bug.kind)}</Hint></div>
             </div>
 
             <div className="collage-grid">
@@ -45,4 +45,4 @@ export default function SavedCollage({ bug }: { bug: SavedBug }) {
             </div>
         </div>
     );
-}
+}

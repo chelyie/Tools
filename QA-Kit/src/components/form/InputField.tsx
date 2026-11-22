@@ -12,7 +12,7 @@ interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
  * @example
  * <InputField label="Bug title" value={title} onChange={(e) => setTitle(e.target.value)} />
  *
- * Used in: BugDetailsSection, SlotEditor, SelectedMarkControls
+ * Used in: SlotEditor, SelectedMarkControls
  */
 export default function InputField({ label, groupClassName, className, type = 'text', ...rest }: InputFieldProps) {
     return (

@@ -22,11 +22,28 @@ export function layoutRatio(slot: Slot): number {
     return Math.min(Math.max(ratio, MIN_RATIO), MAX_RATIO);
 }
 
-/** Splits slots into rows of `size`, keeping each slot's index. */
+/** A landscape file is wide enough that it needs the full width of the collage to show its details. */
+export function isLandscape(slot: Slot): boolean {
+    return slot.kind !== '' && slot.ratio > 1;
+}
+
+/**
+ * Splits slots into rows of up to `size`, keeping each slot's index.
+ * A landscape file always gets a row to itself, so the next file sits below it at full size.
+ */
 export function toRows(slots: Slot[], size: number): SlotPosition[][] {
     const rows: SlotPosition[][] = [];
+    let open = false; // whether the last row can still take another slot
     slots.forEach((slot, index) => {
-        if (index % size === 0) rows.push([]);
+        if (isLandscape(slot)) {
+            rows.push([{ slot, index }]);
+            open = false;
+            return;
+        }
+        if (!open || rows[rows.length - 1].length >= size) {
+            rows.push([]);
+            open = true;
+        }
         rows[rows.length - 1].push({ slot, index });
     });
     return rows;
@@ -35,4 +52,4 @@ export function toRows(slots: Slot[], size: number): SlotPosition[][] {
 /** Text color that stays readable on top of a highlight color. */
 export function inkFor(color: string): string {
     return MARK_COLORS.find((c) => c.color === color)?.ink ?? '#fff';
-}
+}

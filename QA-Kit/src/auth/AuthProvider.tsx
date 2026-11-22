@@ -5,7 +5,7 @@ import {
     GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, type User
 } from 'firebase/auth';
 import { getFirebaseAuth, isFirebaseConfigured } from '@config/firebase';
-import { AuthContext } from '@context/auth.context';
+import { AuthContext } from '@auth/auth.context';
 import translationEN from '@locales/en';
 
 const IGNORED_CODES = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];

@@ -118,7 +118,6 @@ button:focus-visible, input:focus-visible { outline: var(--focus); outline-offse
     width: 100%; box-sizing: border-box; min-height: 44px; padding: 0 12px;
     border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; color: var(--ink); font-size: 14px;
 }
-.field--readonly { background: var(--bg); font-weight: 600; letter-spacing: 0.01em; }
 
 .hint { font-size: 12px; font-weight: 400; color: var(--muted); }
 .hint--strong { font-size: 13px; font-weight: 600; }
@@ -318,3 +317,18 @@ html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display
     .mark-box__handle { width: 26px; height: 26px; right: -13px; bottom: -13px; }
     .btn, .icon-btn { min-height: 44px; }
 }
+
+/* ---------- Popup (Modal) ---------- */
+.modal {
+    position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px;
+    background: rgba(14, 17, 23, 0.55);
+}
+.modal__box {
+    width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 12px; padding: 22px;
+    border-radius: 14px; background: var(--surface); box-shadow: 0 20px 50px rgba(14, 17, 23, 0.35);
+}
+.modal__title { margin: 0; font-size: 18px; font-weight: 700; }
+.modal__text { margin: 0; font-size: 14px; color: var(--muted); }
+.modal__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.slot:focus { outline: none; }
+.slot:focus-within { border-color: var(--primary); }

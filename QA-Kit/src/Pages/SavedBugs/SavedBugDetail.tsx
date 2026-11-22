@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import CollageToolbar from '@pages/BugVerification/sections/collage/CollageToolbar';
 import ErrorMessage from '@components/feedback/ErrorMessage';
 import Hint from '@components/feedback/Hint';
 import { SplitIcon } from '@components/icon/icons';
-import AccountBar from '@components/layout/AccountBar';
+import AccountBar from '@auth/AccountBar';
 import AppHeader from '@components/layout/AppHeader';
 import PageLayout from '@components/layout/PageLayout';
 import translationEN from '@locales/en';
 import SavedCollage from '@pages/SavedBugs/SavedCollage';
-import type { SavedBug } from '@type/Evidence.type';
+import type { ImageFormat, SavedBug } from '@type/Evidence.type';
 import { getBug } from '@utils/bugStore';
+import { exportCollage, saveBlob } from '@utils/exportCollage';
 import { fillTemplate } from '@utils/text';
 
 /** One saved bug, read-only. */
@@ -17,6 +19,33 @@ export default function SavedBugDetail() {
     const { bugId = '' } = useParams();
     const [bug, setBug] = useState<SavedBug | null | undefined>(undefined);
     const [error, setError] = useState('');
+    const [format, setFormat] = useState<ImageFormat>('png');
+    const [busy, setBusy] = useState(false);
+    const collageRef = useRef<HTMLDivElement>(null);
+
+    /** Rebuilds the collage from the saved files so it can be downloaded again. */
+    async function download() {
+        if (!bug) return;
+        setError('');
+        setBusy(true);
+        try {
+            const { blob, ext } = await exportCollage({ ticket: bug.bugId, slots: bug.slots, preview: collageRef.current, format });
+            saveBlob(blob, `${bug.bugId}.${ext}`);
+        }
+        catch (e) {
+            setError(e instanceof Error && e.message
+                ? e.message
+                : translationEN.downloadFailed);
+        }
+        finally {
+            setBusy(false);
+        }
+    }
+
+    function eachVideo(fn: (video: HTMLVideoElement) => void) {
+        collageRef.current?.querySelectorAll('video')
+            .forEach(fn);
+    }
 
     useEffect(() => {
         let active = true;
@@ -63,10 +92,25 @@ export default function SavedBugDetail() {
                             {new Date(bug.updatedAt)
                                 .toLocaleString()}
                         </Hint>
-                        <SavedCollage bug={bug} />
+                        <div className="row row--end">
+                            <CollageToolbar
+                                hasVideo={bug.slots.some((s) => s.kind === 'video')}
+                                saveLabel={translationEN.downloadAgain}
+                                format={format}
+                                busy={busy}
+                                onFormatChange={setFormat}
+                                onDownload={() => void download()}
+                                onPlayAll={() => eachVideo((v) => {
+                                    v.currentTime = 0;
+                                    void v.play();
+                                })}
+                                onPauseAll={() => eachVideo((v) => v.pause())}
+                            />
+                        </div>
+                        <SavedCollage bug={bug} ref={collageRef} />
                     </>
                 )}
             </div>
         </PageLayout>
     );
-}
+}

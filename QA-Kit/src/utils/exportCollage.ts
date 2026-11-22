@@ -11,6 +11,7 @@ const INNER = OUTER + PAD;
 const GAP = 24;
 const CAPTION_H = 56;
 const FONT = '\'Inter\', system-ui, sans-serif';
+const VIDEO_BITRATE = 24_000_000; // high bitrate so re-encoding the collage doesn't blur the video
 const MAX_RECORD_MS = 60_000;
 const VIDEO_TYPES = ['video/mp4;codecs=avc1', 'video/webm;codecs=vp9', 'video/webm'];
 
@@ -23,7 +24,6 @@ type Source = Drawable | null;
 
 interface ExportOptions {
     ticket: string;
-    title: string;
     slots: Slot[];
     preview: HTMLElement | null;
     format: ImageFormat; // used when there is no video
@@ -47,13 +47,13 @@ function drawContain(ctx: CanvasRenderingContext2D, src: NonNullable<Source>, x:
 }
 
 /**
- * Draws the collage card (ticket, title, labelled slots, highlight boxes) and exports it:
+ * Draws the collage card (ticket, labelled slots, highlight boxes) and exports it:
  * a PNG/JPG when every slot is a picture, a video when any slot is a video.
  */
 export async function exportCollage(opts: ExportOptions): Promise<{ blob: Blob; ext: string }> {
-    const { ticket, title, slots, preview, format } = opts;
+    const { ticket, slots, preview, format } = opts;
     // Same layout as the preview: rows of three, widths follow each file's shape so a row shares one height.
-    const headH = 96;
+    const headH = 56;
     const cells: { x: number; y: number; w: number; frameH: number; cellH: number }[] = [];
     let cursorY = INNER + headH;
     toRows(slots, SLOTS_PER_ROW)
@@ -97,13 +97,12 @@ export async function exportCollage(opts: ExportOptions): Promise<{ blob: Blob; 
         ctx.lineWidth = 2;
         ctx.stroke();
 
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         ctx.textBaseline = 'top';
         ctx.fillStyle = '#4a5060';
         ctx.font = `600 22px ${FONT}`;
         ctx.fillText(ticket, INNER, INNER);
-        ctx.fillStyle = '#14171f';
-        ctx.font = `700 40px ${FONT}`;
-        ctx.fillText(title, INNER, INNER + 34, WIDTH - INNER * 2);
 
         slots.forEach((slot, i) => {
             const { x, y, w: cellW, frameH, cellH } = cells[i];
@@ -200,7 +199,7 @@ async function recordVideo(canvas: HTMLCanvasElement, draw: () => void, videos: 
     if (!mimeType) throw new Error('Video download is not supported in this browser.');
 
     const chunks: Blob[] = [];
-    const recorder = new MediaRecorder(canvas.captureStream(30), { mimeType, videoBitsPerSecond: 8_000_000 });
+    const recorder = new MediaRecorder(canvas.captureStream(30), { mimeType, videoBitsPerSecond: VIDEO_BITRATE });
     recorder.ondataavailable = (e) => {
         if (e.data.size) chunks.push(e.data);
     };
@@ -247,4 +246,4 @@ export function saveBlob(blob: Blob, fileName: string) {
     a.download = fileName;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+}

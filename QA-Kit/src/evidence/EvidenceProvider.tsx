@@ -2,12 +2,12 @@ import {
     useCallback, useEffect, useMemo, useReducer, useRef, type ReactNode
 } from 'react';
 import { DEFAULT_RATIO, MARK_COLORS } from '@constant/evidence.constant';
-import { EvidenceContext } from '@context/evidence.context';
-import { createState, EMPTY_MEDIA, evidenceReducer, nextMarkId } from '@context/evidence.reducer';
+import { EvidenceContext } from '@evidence/evidence.context';
+import { createState, EMPTY_MEDIA, evidenceReducer, nextMarkId } from '@evidence/evidence.reducer';
 import { isFirebaseConfigured } from '@config/firebase';
 import useAuth from '@hooks/useAuth';
 import translationEN from '@locales/en';
-import type { Mark, Slot } from '@type/Evidence.type';
+import type { EvidenceKind, Mark, Slot } from '@type/Evidence.type';
 import { claimTicket, peekTicket, saveBugDoc } from '@utils/bugStore';
 import { uploadMedia } from '@utils/cloudinaryUpload';
 import { getMediaKind, measureMedia, revokeUrl } from '@utils/evidenceFiles';
@@ -19,10 +19,11 @@ function revokeSlotUrl(slots: Slot[], id: number) {
     if (slot) revokeUrl(slot.url);
 }
 
-export default function EvidenceProvider({ children }: { children: ReactNode }) {
+/** Holds one report. Each page (bug, fixed) gets its own provider, with its own ticket numbers. */
+export default function EvidenceProvider({ kind, children }: { kind: EvidenceKind; children: ReactNode }) {
     const { user } = useAuth();
     const uid = user?.uid;
-    const [state, dispatch] = useReducer(evidenceReducer, undefined, () => createState(readSequence(false)));
+    const [state, dispatch] = useReducer(evidenceReducer, undefined, () => createState(readSequence(false, 1, kind)));
 
     // Files picked for each slot, kept until they are uploaded on save.
     const filesRef = useRef(new Map<number, File>());
@@ -40,12 +41,12 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
     const refreshTicket = useCallback(async(day: string) => {
         if (!isFirebaseConfigured || !uid) return;
         try {
-            dispatch({ type: 'ticket', day, ticketNo: await peekTicket(day) });
+            dispatch({ type: 'ticket', day, ticketNo: await peekTicket(day, kind) });
         }
         catch {
             /* keep the local number */
         }
-    }, [uid]);
+    }, [uid, kind]);
 
     useEffect(() => {
         void refreshTicket(stateRef.current.ticketDay);
@@ -55,7 +56,7 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
     useEffect(() => {
         function check() {
             if (stateRef.current.ticketDay !== todayStamp() && !stateRef.current.bugId) {
-                dispatch({ type: 'newDay', ticketNo: readSequence(false) });
+                dispatch({ type: 'newDay', ticketNo: readSequence(false, 1, kind) });
                 void refreshTicket(todayStamp());
             }
         }
@@ -67,9 +68,7 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
             window.removeEventListener('focus', check);
             document.removeEventListener('visibilitychange', check);
         };
-    }, [refreshTicket]);
-
-    const setTitle = useCallback((title: string) => dispatch({ type: 'title', title }), []);
+    }, [refreshTicket, kind]);
 
     const setSlotLabel = useCallback((id: number, label: string) => dispatch({ type: 'slotPatch', id, patch: { label } }), []);
 
@@ -121,15 +120,14 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
     const newBug = useCallback(() => {
         stateRef.current.slots.forEach((s) => revokeUrl(s.url));
         filesRef.current.clear();
-        dispatch({ type: 'reset', ticketNo: readSequence(true, stateRef.current.ticketNo) });
+        dispatch({ type: 'reset', ticketNo: readSequence(true, stateRef.current.ticketNo, kind) });
         void refreshTicket(todayStamp());
-    }, [refreshTicket]);
+    }, [refreshTicket, kind]);
 
     const saveBug = useCallback(async() => {
         if (!user) throw new Error(translationEN.notOnTeamList);
         const start = stateRef.current;
         if (start.bugId) return start.bugId; // a saved bug is final
-        if (!start.title.trim()) throw new Error(translationEN.saveNeedsTitle);
 
         // 1. Upload the files that are still on this computer, then point the slots at the uploaded copies.
         const slots = await Promise.all(start.slots.map(async(slot) => {
@@ -148,26 +146,26 @@ export default function EvidenceProvider({ children }: { children: ReactNode }) 
         // 2. A new bug takes the next shared ticket number for the day.
         let { bugId, ticketNo } = start;
         if (!bugId) {
-            ticketNo = await claimTicket(start.ticketDay);
-            bugId = formatTicket(ticketNo, start.ticketDay);
+            ticketNo = await claimTicket(start.ticketDay, kind);
+            bugId = formatTicket(ticketNo, start.ticketDay, kind);
         }
 
         // 3. Save it for the team.
         await saveBugDoc(
             { uid: user.uid, email: user.email ?? '' },
-            { bugId, title: start.title.trim(), ticketNo, ticketDay: start.ticketDay, slots }
+            { bugId, kind, ticketNo, ticketDay: start.ticketDay, slots }
         );
         dispatch({ type: 'saved', bugId, ticketNo });
         return bugId;
-    }, [user]);
+    }, [user, kind]);
 
-    const ticketId = formatTicket(state.ticketNo, state.ticketDay);
+    const ticketId = formatTicket(state.ticketNo, state.ticketDay, kind);
 
     const value = useMemo(
         () => ({
-            state, ticketId, setTitle, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug
+            state, ticketId, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug
         }),
-        [state, ticketId, setTitle, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug]
+        [state, ticketId, setSlotLabel, setSlotFile, clearSlot, addSlot, removeSlot, addMark, updateMark, removeMark, newBug, saveBug]
     );
 
     return <EvidenceContext.Provider value={value}>{children}</EvidenceContext.Provider>;
